@@ -243,3 +243,26 @@ if (expWrap) {
     expWrap.appendChild(item)
   })
 }
+
+// Mobile menu toggle (placed after DOM content init)
+try {
+  const toggle = document.getElementById('menu-toggle')
+  const mobileMenu = document.getElementById('mobile-menu')
+  if (toggle && mobileMenu) {
+    toggle.addEventListener('click', () => {
+      const isClosed = mobileMenu.classList.contains('menu-closed')
+      mobileMenu.classList.toggle('menu-closed', !isClosed)
+      mobileMenu.classList.toggle('menu-open', isClosed)
+      toggle.setAttribute('aria-expanded', String(isClosed))
+    })
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        mobileMenu.classList.remove('menu-open')
+        mobileMenu.classList.add('menu-closed')
+        toggle.setAttribute('aria-expanded', 'false')
+      })
+    })
+  }
+} catch (e) {
+  // no-op
+}
