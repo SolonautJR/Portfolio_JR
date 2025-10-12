@@ -249,17 +249,28 @@ try {
   const toggle = document.getElementById('menu-toggle')
   const mobileMenu = document.getElementById('mobile-menu')
   if (toggle && mobileMenu) {
+    // Ensure correct initial aria state
+    mobileMenu.setAttribute('aria-hidden', String(mobileMenu.classList.contains('menu-closed')))
     toggle.addEventListener('click', () => {
-      const isClosed = mobileMenu.classList.contains('menu-closed')
-      mobileMenu.classList.toggle('menu-closed', !isClosed)
-      mobileMenu.classList.toggle('menu-open', isClosed)
-      toggle.setAttribute('aria-expanded', String(isClosed))
-    })
-    mobileMenu.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
+      var isClosed = mobileMenu.classList.contains('menu-closed')
+      if (isClosed) {
+        mobileMenu.classList.remove('menu-closed')
+        mobileMenu.classList.add('menu-open')
+        toggle.setAttribute('aria-expanded', 'true')
+        mobileMenu.setAttribute('aria-hidden', 'false')
+      } else {
         mobileMenu.classList.remove('menu-open')
         mobileMenu.classList.add('menu-closed')
         toggle.setAttribute('aria-expanded', 'false')
+        mobileMenu.setAttribute('aria-hidden', 'true')
+      }
+    })
+    Array.prototype.forEach.call(mobileMenu.querySelectorAll('a'), function(a) {
+      a.addEventListener('click', function() {
+        mobileMenu.classList.remove('menu-open')
+        mobileMenu.classList.add('menu-closed')
+        toggle.setAttribute('aria-expanded', 'false')
+        mobileMenu.setAttribute('aria-hidden', 'true')
       })
     })
   }
